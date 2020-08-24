@@ -17,9 +17,16 @@ sockets.on('connection', socket => {
     const playerId = socket.id
     console.log(`Player connected on server with ${playerId}`)
 
+    game.addPlayer({ playerId: playerId })
+
     socket.emit('setup', game.state)
+
+    socket.on('disconnect', () => {
+        game.removePlayer({ playerId: playerId })
+        console.log(`> Player ${playerId} disconnected`)
+    })
 })
 
-server.listen(3000, () => {
+server.listen(80, () => {
     console.log(`> server listening on port: 3000`)
 })
